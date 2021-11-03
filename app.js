@@ -1,5 +1,13 @@
-function ShowNotes ()
+function ShowNotes (pIsSearch)
 {
+    let search = window.location.search.split ("=");
+    let searchtxt = search[search.length - 1].toLowerCase ();
+
+    if (pIsSearch == false) {
+
+        searchtxt = null;
+    }
+
     let notes = localStorage.getItem ("notes");
 
     if (notes == null) {
@@ -13,13 +21,19 @@ function ShowNotes ()
     let html = "";
 
     notesobj.forEach((element, index) => {
-        html += `<div class="notecard card my-3 border-dark" style="width: 32%;">
-                    <div class="card-header text-white bg-dark">Note ${index + 1}</div>
-                        <div class="card-body">
-                        <p class="card-text">${element}</p>
-                        <button id=${index} onclick="DeleteNote (this.id)" class="btn btn-secondary">Delete Note</button>
-                    </div>
-                </div>`
+
+        let elementlower = element.toLowerCase ();
+
+        if (searchtxt == null || elementlower.includes (searchtxt)) {
+
+            html += `<div class="notecard card my-3 border-dark" style="width: 32%;">
+                        <div class="card-header text-white bg-dark">Note ${index + 1}</div>
+                            <div class="card-body">
+                            <p class="card-text">${element}</p>
+                            <button id=${index} onclick="DeleteNote (this.id)" class="btn btn-secondary">Delete Note</button>
+                        </div>
+                    </div>`
+        }
     });
 
     let noteselem = document.getElementById ("notes");
@@ -54,7 +68,7 @@ addnote.addEventListener ("click", element => {
 
     notetxt.value = "";
 
-    ShowNotes ();
+    ShowNotes (false);
 })
 
 function DeleteNote (pIndex)
@@ -73,29 +87,7 @@ function DeleteNote (pIndex)
 
     localStorage.setItem ("notes", JSON.stringify (notesobj));
 
-    ShowNotes ();
+    ShowNotes (false);
 }
 
-let searchbtn = document.getElementById ("searchbtn");
-
-searchbtn.addEventListener ("click", element => {
-
-    let search = document.getElementById ("searchtxt");
-    let searchtxt = search.value.toLowerCase ();
-    let notecards = document.getElementsByClassName ("notecard");
-
-    Array.from (notecards).forEach (element => {
-
-        let cardtxt = element.getElementsByTagName ("p")[0].innerText.toLowerCase ();
-
-        if (cardtxt.includes (searchtxt)) {
-
-            element.style.display = "block";
-        } else {
-
-            element.style.display = "none";
-        }
-    })
-})
-
-ShowNotes ();
+ShowNotes (true);

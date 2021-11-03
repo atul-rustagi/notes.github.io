@@ -41,10 +41,7 @@ function ShowNotes ()
     }
 }
 
-let addnote = document.getElementById ("addnote");
-
-addnote.addEventListener ("click", element => {
-
+function AddNote () {
     let notetitle = document.getElementById ("notetitle");
     let notetxt = document.getElementById ("notetxt");
     let isimportant = document.getElementById ("isimportant");
@@ -67,13 +64,7 @@ addnote.addEventListener ("click", element => {
     notesobj.push (obj);
 
     localStorage.setItem ("notes", JSON.stringify (notesobj));
-
-    notetitle.value = "";
-    notetxt.value = "";
-    isimportant.checked = false;
-
-    ShowNotes ();
-})
+}
 
 function DeleteNote (pIndex)
 {

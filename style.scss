@@ -5,3 +5,13 @@
 .row>*{
     padding-inline: 0;
 }
+
+.notecard {
+    width: 32%;
+}
+
+@media (max-width: 991px) {
+    .notecard {
+        width: 100%;
+    }
+}

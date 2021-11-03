@@ -22,14 +22,19 @@ function ShowNotes (pIsSearch)
 
     notesobj.forEach((element, index) => {
 
-        let elementlower = element.toLowerCase ();
+        let title = element.title;
+        let note = element.note;
+        let isimportant = element.isimportant;
 
-        if (searchtxt == null || elementlower.includes (searchtxt)) {
+        let titlelower = title.toLowerCase ();
+        let notelower = note.toLowerCase ();
 
-            html += `<div class="notecard card my-3 border-dark" style="width: 32%;">
-                        <div class="card-header text-white bg-dark">Note ${index + 1}</div>
+        if (searchtxt == null || titlelower.includes (searchtxt) || notelower.includes (searchtxt)) {
+
+            html += `<div class="notecard card my-3 border-dark">
+                        <div class="card-header text-white bg-dark">${title} <span class="badge bg-light text-dark">${isimportant ? 'Important' : ''}</span></div>
                             <div class="card-body">
-                            <p class="card-text">${element}</p>
+                            <p class="card-text">${note}</p>
                             <button id=${index} onclick="DeleteNote (this.id)" class="btn btn-secondary">Delete Note</button>
                         </div>
                     </div>`
@@ -41,6 +46,11 @@ function ShowNotes (pIsSearch)
     if (notesobj.length != 0) {
 
         noteselem.innerHTML = html;
+
+        if (noteselem.innerHTML == "") {
+
+            noteselem.innerHTML = `Nothing to show!! Use "Add a Note" section above to add notes.`
+        }
     } else {
 
         noteselem.innerHTML = `Nothing to show!! Use "Add a Note" section above to add notes.`
@@ -51,7 +61,9 @@ let addnote = document.getElementById ("addnote");
 
 addnote.addEventListener ("click", element => {
 
+    let notetitle = document.getElementById ("notetitle");
     let notetxt = document.getElementById ("notetxt");
+    let isimportant = document.getElementById ("isimportant");
     let notes = localStorage.getItem ("notes");
 
     if (notes == null) {
@@ -62,11 +74,19 @@ addnote.addEventListener ("click", element => {
         notesobj = JSON.parse (notes);
     }
 
-    notesobj.push (notetxt.value);
+    let obj = {
+        "title" : notetitle.value,
+        "note" : notetxt.value,
+        "isimportant" : isimportant.checked
+    }
+
+    notesobj.push (obj);
 
     localStorage.setItem ("notes", JSON.stringify (notesobj));
 
+    notetitle.value = "";
     notetxt.value = "";
+    isimportant.checked = false;
 
     ShowNotes (false);
 })

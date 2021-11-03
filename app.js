@@ -78,6 +78,16 @@ function DeleteNote (pIndex)
         notesobj = JSON.parse (notes);
     }
 
+    let obj = notesobj[pIndex];
+
+    if (obj.isimportant == true) {
+
+        if (confirm ("Are you sure you want to delete important note?") != true) {
+
+            return;
+        }
+    }
+
     notesobj.splice (pIndex, 1);
 
     localStorage.setItem ("notes", JSON.stringify (notesobj));

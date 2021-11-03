@@ -1,13 +1,5 @@
-function ShowNotes (pIsSearch)
+function ShowNotes ()
 {
-    let search = window.location.search.split ("=");
-    let searchtxt = search[search.length - 1].toLowerCase ();
-
-    if (pIsSearch == false) {
-
-        searchtxt = null;
-    }
-
     let notes = localStorage.getItem ("notes");
 
     if (notes == null) {
@@ -18,6 +10,9 @@ function ShowNotes (pIsSearch)
         notesobj = JSON.parse (notes);
     }
 
+    let notesheading = document.getElementById ("notes-heading");
+    notesheading.innerText = `Your Notes`
+
     let html = "";
 
     notesobj.forEach((element, index) => {
@@ -26,19 +21,13 @@ function ShowNotes (pIsSearch)
         let note = element.note;
         let isimportant = element.isimportant;
 
-        let titlelower = title.toLowerCase ();
-        let notelower = note.toLowerCase ();
-
-        if (searchtxt == null || titlelower.includes (searchtxt) || notelower.includes (searchtxt)) {
-
-            html += `<div class="notecard card my-3 border-dark">
-                        <div class="card-header text-white bg-dark">${title} <span class="badge bg-light text-dark">${isimportant ? 'Important' : ''}</span></div>
-                            <div class="card-body">
-                            <p class="card-text">${note}</p>
-                            <button id=${index} onclick="DeleteNote (this.id)" class="btn btn-secondary">Delete Note</button>
-                        </div>
-                    </div>`
-        }
+        html += `<div class="notecard card my-3 border-dark">
+                    <div class="card-header text-white bg-dark">${title} <span class="badge bg-light text-dark">${isimportant ? '❕' : ''}</span></div>
+                        <div class="card-body">
+                        <p class="card-text">${note}</p>
+                        <button id=${index} onclick="DeleteNote (this.id)" class="btn btn-secondary">Delete Note</button>
+                    </div>
+                </div>`
     });
 
     let noteselem = document.getElementById ("notes");
@@ -46,11 +35,6 @@ function ShowNotes (pIsSearch)
     if (notesobj.length != 0) {
 
         noteselem.innerHTML = html;
-
-        if (noteselem.innerHTML == "") {
-
-            noteselem.innerHTML = `Nothing to show!! Use "Add a Note" section above to add notes.`
-        }
     } else {
 
         noteselem.innerHTML = `Nothing to show!! Use "Add a Note" section above to add notes.`
@@ -88,7 +72,7 @@ addnote.addEventListener ("click", element => {
     notetxt.value = "";
     isimportant.checked = false;
 
-    ShowNotes (false);
+    ShowNotes ();
 })
 
 function DeleteNote (pIndex)
@@ -107,7 +91,35 @@ function DeleteNote (pIndex)
 
     localStorage.setItem ("notes", JSON.stringify (notesobj));
 
-    ShowNotes (false);
+    ShowNotes ();
 }
 
-ShowNotes (true);
+let searchbtn = document.getElementById ("searchbtn");
+searchbtn.addEventListener ("click", element => {
+
+    let search = document.getElementById ("searchtxt");
+    let searchtxt = search.value.toLowerCase ();
+
+    let notecards = document.getElementsByClassName ("notecard");
+
+    Array.from (notecards).forEach (element => {
+
+        let cardtxt = element.getElementsByClassName ("card-text")[0].innerText.toLowerCase ();
+        let cardtitle = element.getElementsByClassName ("card-header")[0].innerText.toLowerCase ();
+
+        if (cardtxt.includes (searchtxt) || cardtitle.includes (searchtxt)) {
+
+            element.style.display = "block";
+        } else {
+
+            element.style.display = "none";
+        }
+    })
+
+    let notesheading = document.getElementById ("notes-heading");
+    notesheading.innerText = `${search.value != "" ? `Search Result(s) for "${search.value}"` : "Your Notes"}`
+
+    search.value = "";
+})
+
+ShowNotes ();

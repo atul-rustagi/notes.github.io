@@ -15,10 +15,10 @@
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
             <a href="index.html" class="navbar-brand">My Notes</a>
-            <form class="d-flex" method="get">
+            <div class="d-flex">
                 <input class="form-control me-2" id="searchtxt" type="search" placeholder="Search" name="searchtxt" aria-label="Search">
                 <button class="btn btn-outline-light" id="searchbtn" type="submit">Search</button>
-            </form>
+            </div>
         </div>
     </nav>
     
@@ -34,8 +34,8 @@
                 <textarea class="form-control mb-3" id="notetxt" placeholder="Note" rows="3"></textarea>
                 <div class="form-check mb-3">
                     <input class="form-check-input" type="checkbox" value="" id="isimportant">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Mark as Important
+                    <label class="form-check-label" for="isimportant">
+                        Mark as Important ❕
                     </label>
                   </div>
                 <button id="addnote" class="btn btn-secondary">Add Note</button>
@@ -44,7 +44,7 @@
 
         <!-- output notes -->
         <hr>
-        <h1>Your Notes</h1>
+        <h1 id="notes-heading"></h1>
         <div id="notes" class="row" style="gap: 2%; margin-inline: 0;">
             
         </div>

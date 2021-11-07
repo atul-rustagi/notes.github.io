@@ -25,8 +25,8 @@ function ShowNotes ()
                     <div class="card-header text-white bg-dark">${title} <span class="badge bg-light text-dark">${isimportant ? '❕' : ''}</span></div>
                         <div class="card-body">
                         <pre class="card-text">${note}</pre>
-                        <button onclick="DeleteNote (${index})" class="btn btn-secondary">Delete Note</button>
-                        <button onclick="ToggleImp (${index})" class="btn btn-secondary">${isimportant ? 'Mark Not Important' : 'Mark Important'}</button>
+                        <button onclick="DeleteNote (${index})" class="delNote btn btn-secondary">Delete Note</button>
+                        <button onclick="ToggleImp (${index})" class="tglImp btn btn-secondary">${isimportant ? 'Mark Not Important' : 'Mark Important'}</button>
                     </div>
                 </div>`
     });

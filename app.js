@@ -24,8 +24,9 @@ function ShowNotes ()
         html += `<div class="notecard card my-3 border-dark">
                     <div class="card-header text-white bg-dark">${title} <span class="badge bg-light text-dark">${isimportant ? '❕' : ''}</span></div>
                         <div class="card-body">
-                        <p class="card-text">${note}</p>
-                        <button id=${index} onclick="DeleteNote (this.id)" class="btn btn-secondary">Delete Note</button>
+                        <pre class="card-text">${note}</pre>
+                        <button onclick="DeleteNote (${index})" class="btn btn-secondary">Delete Note</button>
+                        <button onclick="ToggleImp (${index})" class="btn btn-secondary">${isimportant ? 'Mark Not Important' : 'Mark Important'}</button>
                     </div>
                 </div>`
     });
@@ -89,6 +90,27 @@ function DeleteNote (pIndex)
     }
 
     notesobj.splice (pIndex, 1);
+
+    localStorage.setItem ("notes", JSON.stringify (notesobj));
+
+    ShowNotes ();
+}
+
+function ToggleImp (pIndex)
+{
+    let notes = localStorage.getItem ("notes");
+
+    if (notes == null) {
+
+        notesobj = [];
+    } else {
+
+        notesobj = JSON.parse (notes);
+    }
+
+    let obj = notesobj[pIndex];
+
+    obj.isimportant = !obj.isimportant;
 
     localStorage.setItem ("notes", JSON.stringify (notesobj));
 

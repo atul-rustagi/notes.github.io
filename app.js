@@ -22,11 +22,12 @@ function ShowNotes ()
         let isimportant = element.isimportant;
 
         html += `<div class="notecard card my-3 border-dark">
-                    <div class="card-header text-white bg-dark">${title} <span class="badge bg-light text-dark">${isimportant ? '❕' : ''}</span></div>
+                    <div id="notetitle-${index}" class="card-header text-white bg-dark">${title} <span class="badge bg-light text-dark">${isimportant ? '❕' : ''}</span></div>
                         <div class="card-body">
-                        <pre class="card-text">${note}</pre>
-                        <button onclick="DeleteNote (${index})" class="delNote btn btn-secondary">Delete Note</button>
-                        <button onclick="ToggleImp (${index})" class="tglImp btn btn-secondary">${isimportant ? 'Mark Not Important' : 'Mark Important'}</button>
+                        <pre id="notetxt-${index}" class="card-text">${note}</pre>
+                        <button onclick="DeleteNote (${index})" id="delNote-${index}" class="delNote btn btn-secondary">Delete Note</button>
+                        <button onclick="EditNote (${index})" id="editNote-${index}" class="editNote btn btn-secondary">Edit Note</button>
+                        <button onclick="ToggleImp (${index})" id="tglImp-${index}" class="tglImp btn btn-secondary">${isimportant ? 'Mark Not Important' : 'Mark Important'}</button>
                     </div>
                 </div>`
     });
@@ -42,7 +43,66 @@ function ShowNotes ()
     }
 }
 
-function AddNote () {
+function EditNote (pIndex)
+{
+    let editbtn = document.getElementById (`editNote-${pIndex}`);
+    let editbtnall = document.getElementsByClassName (`editNote`);
+    let tglbtn = document.getElementsByClassName (`tglImp`);
+    let delbtn = document.getElementsByClassName (`delNote`);
+    let addbtn = document.getElementById (`addnote`);
+
+    let title = document.getElementById (`notetitle-${pIndex}`);
+    let note = document.getElementById (`notetxt-${pIndex}`);
+
+    let notes = localStorage.getItem ("notes");
+
+    if (notes == null) {
+
+        notesobj = [];
+    } else {
+
+        notesobj = JSON.parse (notes);
+    }
+
+    let obj = notesobj[pIndex];
+
+    if (editbtn.innerText === "Edit Note") {
+
+        editbtn.innerText = "Save Note";
+        Array.from (tglbtn).forEach (element => {
+            element.setAttribute ("disabled", "");
+        })
+        Array.from (delbtn).forEach (element => {
+            element.setAttribute ("disabled", "");
+        })
+        Array.from (editbtnall).forEach ((element, index) => {
+            if (index != pIndex) {
+                element.setAttribute ("disabled", "");
+            }
+        })
+        addbtn.setAttribute ("disabled", "");
+
+        if (obj.isimportant == true) {
+
+            title.innerText = title.innerText.slice (0, -1);
+        }
+
+        title.contentEditable = true;
+        note.contentEditable = true;
+    } else {
+        addbtn.removeAttribute ("disabled");
+
+        obj.title = title.innerText == "" ? `---title---` : title.innerText;
+        obj.note = note.innerText == "" ? "---note---" : note.innerText;
+
+        localStorage.setItem ("notes", JSON.stringify (notesobj));
+
+        ShowNotes ();
+    }
+}
+
+function AddNote ()
+{
     let notetitle = document.getElementById ("notetitle");
     let notetxt = document.getElementById ("notetxt");
     let isimportant = document.getElementById ("isimportant");

@@ -1,0 +1,50 @@
+* {
+  font-family: sans-serif;
+}
+
+pre {
+  font-family: sans-serif;
+  font-size: 1rem;
+  white-space: pre-wrap;
+}
+
+.form-control:focus {
+  -webkit-box-shadow: 0 0 0 0.25rem rgba(248, 249, 250, 0.5);
+          box-shadow: 0 0 0 0.25rem rgba(248, 249, 250, 0.5);
+}
+
+.row > * {
+  padding-inline: 0;
+}
+
+.notecard {
+  width: 32%;
+}
+
+@media (max-width: 991px) {
+  .notecard {
+    width: 100%;
+  }
+}
+
+.navbar-brand {
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  font-weight: bold;
+}
+
+.delNote, .tglImp, .editNote {
+  margin-bottom: 2px;
+  margin-top: 2px;
+}
+
+[id^="notetxt-"][contenteditable="true"] {
+  outline: solid seagreen;
+  padding-left: 6px;
+}
+
+[id^="notetitle-"][contenteditable="true"] {
+  outline: 3px solid seagreen;
+  outline-offset: -6px;
+}
+/*# sourceMappingURL=style.css.map */

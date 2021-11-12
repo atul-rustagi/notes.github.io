@@ -1,5 +1,17 @@
-function ShowNotes ()
+function GetIdElem(pId)
 {
+    return document.getElementById (pId);
+}
+
+function GetClassElems (pClass, pElem = document)
+{
+    return pElem.getElementsByClassName (pClass);
+}
+
+function GetNotes ()
+{
+    let notesobj;
+
     let notes = localStorage.getItem ("notes");
 
     if (notes == null) {
@@ -10,7 +22,19 @@ function ShowNotes ()
         notesobj = JSON.parse (notes);
     }
 
-    let notesheading = document.getElementById ("notes-heading");
+    return notesobj;
+}
+
+function SetNotes (pNotes)
+{
+    localStorage.setItem ("notes", JSON.stringify (pNotes));
+}
+
+function ShowNotes ()
+{
+    let notesobj = GetNotes ();
+
+    let notesheading = GetIdElem ("notes-heading");
     notesheading.innerText = `Your Notes`
 
     let html = "";
@@ -32,7 +56,7 @@ function ShowNotes ()
                 </div>`
     });
 
-    let noteselem = document.getElementById ("notes");
+    let noteselem = GetIdElem ("notes");
 
     if (notesobj.length != 0) {
 
@@ -45,24 +69,16 @@ function ShowNotes ()
 
 function EditNote (pIndex)
 {
-    let editbtn = document.getElementById (`editNote-${pIndex}`);
-    let editbtnall = document.getElementsByClassName (`editNote`);
-    let tglbtn = document.getElementsByClassName (`tglImp`);
-    let delbtn = document.getElementsByClassName (`delNote`);
-    let addbtn = document.getElementById (`addnote`);
+    let editbtn = GetIdElem (`editNote-${pIndex}`);
+    let editbtnall = GetClassElems (`editNote`);
+    let tglbtn = GetClassElems (`tglImp`);
+    let delbtn = GetClassElems (`delNote`);
+    let addbtn = GetIdElem (`addnote`);
 
-    let title = document.getElementById (`notetitle-${pIndex}`);
-    let note = document.getElementById (`notetxt-${pIndex}`);
+    let title = GetIdElem (`notetitle-${pIndex}`);
+    let note = GetIdElem (`notetxt-${pIndex}`);
 
-    let notes = localStorage.getItem ("notes");
-
-    if (notes == null) {
-
-        notesobj = [];
-    } else {
-
-        notesobj = JSON.parse (notes);
-    }
+    let notesobj = GetNotes ();
 
     let obj = notesobj[pIndex];
 
@@ -95,7 +111,7 @@ function EditNote (pIndex)
         obj.title = title.innerText == "" ? `---title---` : title.innerText;
         obj.note = note.innerText == "" ? "---note---" : note.innerText;
 
-        localStorage.setItem ("notes", JSON.stringify (notesobj));
+        SetNotes (notesobj);
 
         ShowNotes ();
     }
@@ -103,18 +119,10 @@ function EditNote (pIndex)
 
 function AddNote ()
 {
-    let notetitle = document.getElementById ("notetitle");
-    let notetxt = document.getElementById ("notetxt");
-    let isimportant = document.getElementById ("isimportant");
-    let notes = localStorage.getItem ("notes");
-
-    if (notes == null) {
-
-        notesobj = [];
-    } else {
-
-        notesobj = JSON.parse (notes);
-    }
+    let notetitle = GetIdElem ("notetitle");
+    let notetxt = GetIdElem ("notetxt");
+    let isimportant = GetIdElem ("isimportant");
+    let notesobj = GetNotes ();
 
     let obj = {
         "title" : notetitle.value,
@@ -124,20 +132,12 @@ function AddNote ()
 
     notesobj.push (obj);
 
-    localStorage.setItem ("notes", JSON.stringify (notesobj));
+    SetNotes (notesobj);
 }
 
 function DeleteNote (pIndex)
 {
-    let notes = localStorage.getItem ("notes");
-
-    if (notes == null) {
-
-        notesobj = [];
-    } else {
-
-        notesobj = JSON.parse (notes);
-    }
+    let notesobj = GetNotes ();
 
     let obj = notesobj[pIndex];
 
@@ -151,44 +151,36 @@ function DeleteNote (pIndex)
 
     notesobj.splice (pIndex, 1);
 
-    localStorage.setItem ("notes", JSON.stringify (notesobj));
+    SetNotes (notesobj);
 
     ShowNotes ();
 }
 
 function ToggleImp (pIndex)
 {
-    let notes = localStorage.getItem ("notes");
-
-    if (notes == null) {
-
-        notesobj = [];
-    } else {
-
-        notesobj = JSON.parse (notes);
-    }
+    let notesobj = GetNotes ();
 
     let obj = notesobj[pIndex];
 
     obj.isimportant = !obj.isimportant;
 
-    localStorage.setItem ("notes", JSON.stringify (notesobj));
+    SetNotes (notesobj);
 
     ShowNotes ();
 }
 
-let searchbtn = document.getElementById ("searchbtn");
+let searchbtn = GetIdElem ("searchbtn");
 searchbtn.addEventListener ("click", element => {
 
-    let search = document.getElementById ("searchtxt");
+    let search = GetIdElem ("searchtxt");
     let searchtxt = search.value.toLowerCase ();
 
-    let notecards = document.getElementsByClassName ("notecard");
+    let notecards = GetClassElems ("notecard");
 
     Array.from (notecards).forEach (element => {
 
-        let cardtxt = element.getElementsByClassName ("card-text")[0].innerText.toLowerCase ();
-        let cardtitle = element.getElementsByClassName ("card-header")[0].innerText.toLowerCase ();
+        let cardtxt = GetClassElems ("card-text", element)[0].innerText.toLowerCase ();
+        let cardtitle = GetClassElems ("card-header", element)[0].innerText.toLowerCase ();
 
         if (cardtxt.includes (searchtxt) || cardtitle.includes (searchtxt)) {
 
@@ -199,7 +191,7 @@ searchbtn.addEventListener ("click", element => {
         }
     })
 
-    let notesheading = document.getElementById ("notes-heading");
+    let notesheading = GetIdElem ("notes-heading");
     notesheading.innerText = `${search.value != "" ? `Search Result(s) for "${search.value}"` : "Your Notes"}`
 
     search.value = "";

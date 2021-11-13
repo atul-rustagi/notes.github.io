@@ -85,7 +85,7 @@ function ShowNotes ()
         noteselem.innerHTML = html;
     } else {
 
-        noteselem.innerHTML = `Nothing to show!! Use "Add a Note" section above to add notes.`
+        noteselem.innerHTML = `<p id="no-result-info">Nothing to show!! Use "Add a Note" section above to add notes.</p>`;
     }
 }
 
@@ -212,6 +212,8 @@ function ToggleImp (pIndex)
 let searchbtn = GetIdElem ("searchbtn");
 searchbtn.addEventListener ("click", element => {
 
+    let result = 0;
+
     let search = GetIdElem ("searchtxt");
     let searchtxt = search.value.toLowerCase ();
 
@@ -225,6 +227,7 @@ searchbtn.addEventListener ("click", element => {
         if (cardtxt.includes (searchtxt) || cardtitle.includes (searchtxt)) {
 
             element.style.display = "block";
+            ++result;
         } else {
 
             element.style.display = "none";
@@ -233,6 +236,30 @@ searchbtn.addEventListener ("click", element => {
 
     let notesheading = GetIdElem ("notes-heading");
     notesheading.innerText = `${search.value != "" ? `Search Result(s) for "${search.value}"` : "Your Notes"}`
+
+    let info = GetIdElem ("no-result-info");
+
+    if (result == 0) {
+
+        if (info == null) {
+            info = document.createElement ('p');
+            info.setAttribute ("id", "no-result-info");
+        }
+
+        if (search.value != "") {
+            info.innerText = `No results found for "${search.value}"`;
+        } else {
+            info.innerHTML = `<p id="no-result-info">Nothing to show!! Use "Add a Note" section above to add notes.</p>`;
+        }
+
+        let noteselem = GetIdElem ("notes");
+        noteselem.appendChild (info);
+    } else {
+
+        if (info) {
+            info.remove ();
+        }
+    }
 
     search.value = "";
 })

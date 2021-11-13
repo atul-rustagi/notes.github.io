@@ -1,13 +1,28 @@
+/**
+ * wrapper function to get element by id
+ * @param {string} pId id name
+ * @returns HTML Element for pId
+ */
 function GetIdElem(pId)
 {
     return document.getElementById (pId);
 }
 
+/**
+ * wrapper function to get element collection by class name
+ * @param {string} pClass class name
+ * @param {object} [pElem=document] element
+ * @returns HTML Element Collection
+ */
 function GetClassElems (pClass, pElem = document)
 {
     return pElem.getElementsByClassName (pClass);
 }
 
+/**
+ * function to get notes from local storage
+ * @returns array of notes stored in local storage
+ */
 function GetNotes ()
 {
     let notesobj;
@@ -25,11 +40,18 @@ function GetNotes ()
     return notesobj;
 }
 
+/**
+ * function to set notes in local storage
+ * @param {Array} pNotes array of notes
+ */
 function SetNotes (pNotes)
 {
     localStorage.setItem ("notes", JSON.stringify (pNotes));
 }
 
+/**
+ * function to render notes from local storage to dom
+ */
 function ShowNotes ()
 {
     let notesobj = GetNotes ();
@@ -67,6 +89,10 @@ function ShowNotes ()
     }
 }
 
+/**
+ * function to edit and save note's title and content
+ * @param {number} pIndex index of note to be edited
+ */
 function EditNote (pIndex)
 {
     let editbtn = GetIdElem (`editNote-${pIndex}`);
@@ -103,8 +129,8 @@ function EditNote (pIndex)
             title.innerText = title.innerText.slice (0, -1);
         }
 
-        title.contentEditable = true;
-        note.contentEditable = true;
+        title.contentEditable = "true";
+        note.contentEditable = "true";
     } else {
         addbtn.removeAttribute ("disabled");
 
@@ -117,6 +143,9 @@ function EditNote (pIndex)
     }
 }
 
+/**
+ * function to add new note
+ */
 function AddNote ()
 {
     let notetitle = GetIdElem ("notetitle");
@@ -130,11 +159,15 @@ function AddNote ()
         "isimportant" : isimportant.checked
     }
 
-    notesobj.push (obj);
+    notesobj.unshift (obj);
 
     SetNotes (notesobj);
 }
 
+/**
+ * function to delete a note
+ * @param {number} pIndex index of note to be deleted
+ */
 function DeleteNote (pIndex)
 {
     let notesobj = GetNotes ();
@@ -156,6 +189,10 @@ function DeleteNote (pIndex)
     ShowNotes ();
 }
 
+/**
+ * function to toggle the importance of note
+ * @param {number} pIndex index of note to be edited
+ */
 function ToggleImp (pIndex)
 {
     let notesobj = GetNotes ();
@@ -169,6 +206,9 @@ function ToggleImp (pIndex)
     ShowNotes ();
 }
 
+/**
+ * functionality to search a note
+ */
 let searchbtn = GetIdElem ("searchbtn");
 searchbtn.addEventListener ("click", element => {
 

@@ -217,12 +217,17 @@ searchbtn.addEventListener ("click", element => {
     let search = GetIdElem ("searchtxt");
     let searchtxt = search.value.toLowerCase ();
 
+    let notesobj = GetNotes ();
     let notecards = GetClassElems ("notecard");
 
-    Array.from (notecards).forEach (element => {
+    Array.from (notecards).forEach ((element, index) => {
 
         let cardtxt = GetClassElems ("card-text", element)[0].innerText.toLowerCase ();
         let cardtitle = GetClassElems ("card-header", element)[0].innerText.toLowerCase ();
+
+        if (notesobj[index].isimportant) {
+            cardtitle = cardtitle.slice (0, -1);
+        }
 
         if (cardtxt.includes (searchtxt) || cardtitle.includes (searchtxt)) {
 

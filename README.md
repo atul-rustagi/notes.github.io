@@ -17,3 +17,6 @@
 ## Languages used
 * Used vanilla JS to create the backend
 * Used bootstrap for frontend
+
+## Screenshot
+![notes app](https://user-images.githubusercontent.com/22448720/141615469-ca1608d9-1d53-487a-a780-e1dfe7f582db.png)

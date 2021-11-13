@@ -50,6 +50,30 @@ function SetNotes (pNotes)
 }
 
 /**
+ * function to escape html characters
+ * @param {string} pText text to be escaped
+ * @returns escaped text
+ */
+function EscapeHTMLChar (pText)
+{
+    let div = document.createElement ("div");
+    div.appendChild (document.createTextNode (pText));
+    return div.innerHTML;
+}
+
+/**
+ * function to unescape html characters
+ * @param {string} pText escaped text
+ * @returns normal text
+ */
+function UnescapeHTMLChar (pText)
+{
+    let div = document.createElement ("div");
+    div.innerHTML = pText;
+    return div.innerText;
+}
+
+/**
  * function to render notes from local storage to dom
  */
 function ShowNotes ()
@@ -63,8 +87,8 @@ function ShowNotes ()
 
     notesobj.forEach((element, index) => {
 
-        let title = element.title;
-        let note = element.note;
+        let title = EscapeHTMLChar (element.title);
+        let note = EscapeHTMLChar (element.note);
         let isimportant = element.isimportant;
 
         html += `<div class="notecard card my-3 border-dark">

@@ -20,6 +20,21 @@ function GetClassElems (pClass, pElem = document)
 }
 
 /**
+ * function to write the text to file and download it
+ * @param {string} pText Text to be written to file
+ * @param {string} pFileName file name
+ */
+ function WriteFile (pText, pFileName)
+ {
+     let file = new Blob ([pText], {type : "text/plain"});
+
+     let a = document.createElement ('a');
+     a.href = URL.createObjectURL (file);
+     a.download = pFileName;
+     a.click ();
+ }
+
+/**
  * function to get notes from local storage
  * @returns array of notes stored in local storage
  */
@@ -292,5 +307,68 @@ searchbtn.addEventListener ("click", element => {
 
     search.value = "";
 })
+
+/**
+ * function to export notes in json format
+ */
+function ExportNotes ()
+{
+    let notesobj = GetNotes ();
+    let notes = JSON.stringify (notesobj, null, 4);
+
+    WriteFile (notes, "notes.json");
+}
+
+/**
+ * function to restore corrupt notes
+ * @param {object} pNotes array of notes
+ * @returns restored notes
+ */
+function RestoreCorruptNote (pNotes)
+{
+    pNotes.forEach (element => {
+
+        if (!("title" in element)) {
+            element.title = "---title---";
+        }
+
+        if (!("note" in element)) {
+            element.note = "---note---";
+        }
+
+        if (!("isimportant" in element)) {
+            element.isimportant = false;
+        }
+    });
+
+    return pNotes;
+}
+
+/**
+ * function to import notes
+ */
+function ImportNotes ()
+{
+    let file = GetIdElem ("importfile");
+
+    let reader = new FileReader ();
+
+    reader.onload = function (element) {
+
+        let newnotes = JSON.parse (element.target.result);
+
+        RestoreCorruptNote (newnotes);
+
+        newnotes = newnotes.concat (GetNotes ());
+
+        SetNotes (newnotes);
+
+        ShowNotes ();
+    };
+
+    reader.readAsText (file.files[0]);
+
+    file.value = "";
+}
 
 ShowNotes ();

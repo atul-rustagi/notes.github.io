@@ -324,26 +324,28 @@ function ExportNotes ()
 /**
  * function to restore corrupt notes
  * @param {object} pNotes array of notes
- * @returns restored notes
  */
-function RestoreCorruptNote (pNotes)
+function ValidateAndPrepareInput (pNotes)
 {
-    pNotes.forEach (element => {
+    for (let i = 0; i < pNotes.length; ++i) {
 
-        if (!("title" in element)) {
-            element.title = "---title---";
+        if (!("note" in pNotes[i]) || pNotes[i].note == "") {
+
+            pNotes.splice (i, 1);
+            --i;
+        } else {
+
+            if (!("title" in pNotes[i]) || pNotes[i].title == "") {
+
+                pNotes[i].title = "---title---";
+            }
+
+            if (!("isimportant" in pNotes[i])) {
+
+                pNotes[i].isimportant = false;
+            }
         }
-
-        if (!("note" in element)) {
-            element.note = "---note---";
-        }
-
-        if (!("isimportant" in element)) {
-            element.isimportant = false;
-        }
-    });
-
-    return pNotes;
+    }
 }
 
 /**
@@ -359,7 +361,7 @@ function ImportNotes ()
 
         let newnotes = JSON.parse (element.target.result);
 
-        RestoreCorruptNote (newnotes);
+        ValidateAndPrepareInput (newnotes);
 
         newnotes = newnotes.concat (GetNotes ());
 
@@ -386,14 +388,20 @@ function UpdateAutocompleteList ()
         autocomplete.removeChild (autocomplete.firstChild);
     }
 
+    let uniquetitles = [];
     notesobj.forEach (element => {
 
-        if (element.title != "---title---") {
+        if (!uniquetitles.includes (element.title)) {
 
-            let option = document.createElement ("option");
-            option.setAttribute ("value", element.title)
-            autocomplete.appendChild (option);
+            uniquetitles.push (element.title);
         }
+    })
+
+    uniquetitles.forEach (element => {
+
+        let option = document.createElement ("option");
+        option.setAttribute ("value", element)
+        autocomplete.appendChild (option);
     })
 }
 

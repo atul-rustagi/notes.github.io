@@ -11,6 +11,7 @@
 * Create editable notes
 * Mark notes important
 * Search in notes
+* Title suggestions while searching notes
 * Confirmation before deleting important note
 * Used local storage for storing notes
 * Import - Export notes in JSON format

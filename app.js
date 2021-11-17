@@ -126,6 +126,8 @@ function ShowNotes ()
 
         noteselem.innerHTML = `<p id="no-result-info">Nothing to show!! Use "Add a Note" section above to add notes.</p>`;
     }
+
+    UpdateAutocompleteList ();
 }
 
 /**
@@ -369,6 +371,30 @@ function ImportNotes ()
     reader.readAsText (file.files[0]);
 
     file.value = "";
+}
+
+/**
+ * function to update the datalist options for autocompletion in search field
+ */
+function UpdateAutocompleteList ()
+{
+    let notesobj = GetNotes ();
+    let autocomplete = GetIdElem ("autocomplete");
+
+    while (autocomplete.firstChild) {
+
+        autocomplete.removeChild (autocomplete.firstChild);
+    }
+
+    notesobj.forEach (element => {
+
+        if (element.title != "---title---") {
+
+            let option = document.createElement ("option");
+            option.setAttribute ("value", element.title)
+            autocomplete.appendChild (option);
+        }
+    })
 }
 
 ShowNotes ();

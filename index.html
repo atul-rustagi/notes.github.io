@@ -34,7 +34,9 @@
                     </li>
                 </ul>
                 <div class="d-flex">
-                    <input class="form-control me-2" id="searchtxt" type="search" placeholder="Search" name="searchtxt" aria-label="Search">
+                    <input class="form-control me-2" autocomplete="off" list="autocomplete" id="searchtxt" type="search" placeholder="Search" name="searchtxt" aria-label="Search">
+                    <datalist id="autocomplete">
+                    </datalist>
                     <button class="btn btn-outline-light" id="searchbtn" type="submit">Search</button>
                 </div>
             </div>

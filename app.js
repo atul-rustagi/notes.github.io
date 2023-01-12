@@ -405,4 +405,46 @@ function UpdateAutocompleteList ()
     })
 }
 
+/**
+ * callback function for SortNotes
+ * @returns comparison result of importance and titles
+ */
+function SortNotesByImportanceAndTitle ()
+{
+    return function (a, b) {
+
+        if (a["isimportant"] && !b["isimportant"]) {
+
+            return -1;
+        } else if (!a["isimportant"] && b["isimportant"]) {
+
+            return 1;
+        } else {
+            if (a["title"] > b["title"]) {
+
+                return 1;
+            } else if (a["title"] < b["title"]) {
+
+                return -1;
+            }
+        }
+
+        return 0;
+    }
+}
+
+/**
+ * Function to sort notes by title
+ */
+function SortNotes ()
+{
+    let notesobj = GetNotes ();
+
+    notesobj.sort (SortNotesByImportanceAndTitle ());
+
+    SetNotes (notesobj);
+
+    ShowNotes ();
+}
+
 ShowNotes ();

@@ -26,11 +26,14 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <button onclick="ExportNotes ()" type="button" class="btn btn-dark">Export Notes</button>
+                        <button onclick="ExportNotes ()" type="button" class="btn btn-dark">Export</button>
                     </li>
                     <li class="nav-item" id="notes-import">
-                        <button onclick="document.getElementById ('importfile').click ()" type="button" class="btn btn-dark">Import Notes</button>
+                        <button onclick="document.getElementById ('importfile').click ()" type="button" class="btn btn-dark">Import</button>
                         <input class="form-control form-control-sm" type="file" id="importfile" onchange="ImportNotes ()" style="display: none;">
+                    </li>
+                    <li class="nav-item">
+                        <button onclick="SortNotes ()" type="button" class="btn btn-dark">Sort</button>
                     </li>
                 </ul>
                 <div class="d-flex">

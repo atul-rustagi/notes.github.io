@@ -15,6 +15,7 @@
 * Confirmation before deleting important note
 * Used local storage for storing notes
 * Import - Export notes in JSON format
+* Sort notes based on importance and title
 
 ## Languages used
 * Used vanilla JS to create the backend
